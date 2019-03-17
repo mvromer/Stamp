@@ -155,3 +155,6 @@ choices:
 * View the template's contents - This will display all executable code segments in the template.
 * Trust the template for the duration of the current run only and continue execution.
 * Mark the template as trusted and continue execution.
+
+Template repositories can also be marked as trusted. A template within a trusted repository will be
+implicitly trusted unless it has been explicitly marked as untrusted.
