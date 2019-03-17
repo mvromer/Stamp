@@ -145,5 +145,13 @@ NOTE: The rationale for possibly including a hash with the name of a trusted tem
 the template's contents did not change.
 
 ## Trust model
-Templates can allow the execution of arbitrary code through substitution expressions and hook
-scripts. For this reason, 
+Templates can execute arbitrary code through substitution expressions and hook scripts. For this
+reason, a template must be marked as trusted before it can be instantiated by Stamp. By default, all
+templates are implicitly untrusted.
+
+When Stamp attempts to instantiate an untrusted template, it will prompt the user with a list of
+choices:
+
+* View the template's contents - This will display all executable code segments in the template.
+* Trust the template for the duration of the current run only and continue execution.
+* Mark the template as trusted and continue execution.
