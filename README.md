@@ -155,3 +155,10 @@ choices:
 * View the template's contents - This will display all executable code segments in the template.
 * Trust the template for the duration of the current run only and continue execution.
 * Mark the template as trusted and continue execution.
+
+## Scripting
+Support for custom scripting is exposed through both substitution expressions and hook scripts. A
+template author will define both of these aspects using a scripting language supported by Stamp.
+
+Stamp will support C# scripting for both usages. Internally, this will be built on top of the
+Rosyln scripting API for the initial release. 
