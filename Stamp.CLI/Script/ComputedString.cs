@@ -4,21 +4,24 @@ namespace Stamp.CLI.Script
 {
     class ComputedString
     {
-        internal ComputedString( string expression )
+        internal ComputedString( string value )
         {
-            m_value = new Lazy<string>( () => ComputeValue( expression ) );
+            this.Value = value;
+            m_computedValue = new Lazy<string>( () => ComputeValue( value ) );
         }
 
-        internal string Value
+        internal string Value { get; }
+
+        internal string ComputedValue
         {
-            get { return m_value.Value; }
+            get { return m_computedValue.Value; }
         }
 
-        private Lazy<string> m_value;
+        private Lazy<string> m_computedValue;
 
-        private static string ComputeValue( string expression )
+        private static string ComputeValue( string value )
         {
-            return expression;
+            return value;
         }
     }
 }
