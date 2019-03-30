@@ -346,3 +346,6 @@ ASALocalRun/
 healthchecksdb
 
 # End of https://www.gitignore.io/api/visualstudio
+
+# ANTLR build tool generated files
+.antlr/

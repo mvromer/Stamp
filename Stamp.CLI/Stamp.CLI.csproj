@@ -9,7 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.7.2" />
+    <PackageReference Include="Antlr4BuildTasks" Version="1.0.4" />
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.3.3" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <Antlr4ToolPath>$(MSBuildProjectDirectory)/../.tools/antlr-4.7.2-complete.jar</Antlr4ToolPath>
+  </PropertyGroup>
 
 </Project>
