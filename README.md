@@ -111,7 +111,7 @@ files:
 
 - path: 'data/bar.csv'
   computed: true
-  outputDir: '{{projectName}}Data'
+  outputDir: '{|projectName|}Data'
   outputName: 'customData.csv'
 
 pre:
