@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using McMaster.Extensions.CommandLineUtils;
+
+[assembly: InternalsVisibleTo( "Stamp.Tests" )]
 
 namespace Stamp.CLI
 {
