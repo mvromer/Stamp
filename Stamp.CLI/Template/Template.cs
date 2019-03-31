@@ -23,7 +23,7 @@ namespace Stamp.CLI.Template
                     .WithNamingConvention( new CamelCaseNamingConvention() )
                     .Build();
 
-            return deserializer.Deserialize<TemplateBuilder>( reader ).Build();
+            return deserializer.Deserialize<Builders.TemplateBuilder>( reader ).Build();
         }
 
         internal Template( string name, SemVersion version )

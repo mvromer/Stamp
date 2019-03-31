@@ -10,7 +10,7 @@ namespace Stamp.Tests
     public class TemplateTests
     {
         [Fact]
-        public void Test1()
+        public void TestItCanCreateManifestFromValidYaml()
         {
             var manifest = @"
 name: FooTemplate

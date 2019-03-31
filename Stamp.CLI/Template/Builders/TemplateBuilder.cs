@@ -1,12 +1,15 @@
+using System.Collections.Generic;
 using Semver;
 
-namespace Stamp.CLI.Template
+namespace Stamp.CLI.Template.Builders
 {
     class TemplateBuilder
     {
         public string Name { get; set; }
 
         public SemVersion Version { get; set; }
+
+        public List<ParameterBuilder> Parameters { get; set; }
 
         public Template Build()
         {
