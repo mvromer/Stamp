@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using McMaster.Extensions.CommandLineUtils;
 
+[assembly: CLSCompliant( isCompliant: false )]
 [assembly: InternalsVisibleTo( "Stamp.Tests" )]
 
 namespace Stamp.CLI
