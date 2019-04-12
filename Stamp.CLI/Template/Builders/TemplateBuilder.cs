@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Semver;
 
 namespace Stamp.CLI.Template.Builders
@@ -13,7 +14,9 @@ namespace Stamp.CLI.Template.Builders
 
         public Template Build()
         {
-            return new Template( this.Name, this.Version );
+            return new Template( this.Name,
+                this.Version,
+                this.Parameters.Select( p => p.Build() ).ToList() );
         }
     }
 }

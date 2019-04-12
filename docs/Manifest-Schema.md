@@ -20,12 +20,17 @@
   - name: type
     type: string
     required: true
-    constraints: "Must be one of the following: int, string, bool, choice."
+    constraints: "Must be one of the following: int, float, string, bool."
+
+  - name: validator
+    type: mapping
+    required: false
+    constraints: "Value must be one of the following mappings: choice."
     children:
-    - name: choices
-      type: list of strings
+    - name: choice
+      type: list of values
       required: true
-      constraints: Required only if parent type is choice. Each item must be unique.
+      constraints: Each value must be convertible to parameter's type.
 
   - name: required
     type: bool

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using FluentAssertions;
 using Xunit;
@@ -15,12 +16,60 @@ namespace Stamp.Tests
             var manifest = @"
 name: FooTemplate
 version: 1.2.3
+
+parameters:
+- name: intVar
+  type: int
+  required: false
+
+- name: floatVar
+  type: float
+  required: true
+
+- name: boolVar
+  type: bool
+
+- name: stringVar
+  type: string
 ";
             using( var reader = new StringReader( manifest ) )
             {
                 var t = Template.CreateFromReader( reader );
                 t.Name.Should().Be( "FooTemplate" );
                 t.Version.Should().Be( "1.2.3" );
+                t.Parameters.Count.Should().Be( 4 );
+
+                var expectedNames = new List<string> { "intVar", "floatVar", "boolVar", "stringVar" };
+
+                foreach( var p in t.Parameters )
+                {
+                    expectedNames.Remove( p.Name ).Should().Be( true );
+
+                    switch( p.Name )
+                    {
+                        case "intVar":
+                            p.Type.Should().Be( typeof(int) );
+                            p.Required.Should().Be( false );
+                            break;
+
+                        case "floatVar":
+                        p.Type.Should().Be( typeof(float) );
+                        p.Required.Should().Be( true );
+                            break;
+
+                        case "boolVar":
+                            p.Type.Should().Be( typeof(bool) );
+                            p.Required.Should().Be( true );
+                            break;
+
+                        case "stringVar":
+                            p.Type.Should().Be( typeof(string) );
+                            p.Required.Should().Be( true );
+                            break;
+                    }
+                }
+
+                expectedNames.Count.Should().Be( 0 );
             }
         }
     }
