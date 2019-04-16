@@ -48,22 +48,18 @@ parameters:
                     switch( p.Name )
                     {
                         case "intVar":
-                            p.Type.Should().Be( typeof(int) );
                             p.Required.Should().Be( false );
                             break;
 
                         case "floatVar":
-                        p.Type.Should().Be( typeof(float) );
-                        p.Required.Should().Be( true );
+                            p.Required.Should().Be( true );
                             break;
 
                         case "boolVar":
-                            p.Type.Should().Be( typeof(bool) );
                             p.Required.Should().Be( true );
                             break;
 
                         case "stringVar":
-                            p.Type.Should().Be( typeof(string) );
                             p.Required.Should().Be( true );
                             break;
                     }

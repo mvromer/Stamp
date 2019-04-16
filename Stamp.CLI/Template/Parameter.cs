@@ -2,18 +2,15 @@ using System;
 
 namespace Stamp.CLI.Template
 {
-    class Parameter
+    class Parameter<T> : IParameter
     {
-        internal string Name { get; }
+        public string Name { get; }
 
-        internal Type Type { get; }
+        public bool Required { get; }
 
-        internal bool Required { get; }
-
-        internal Parameter( string name, Type type, bool required )
+        internal Parameter( string name, bool required )
         {
             this.Name = name;
-            this.Type = type;
             this.Required = required;
         }
     }

@@ -12,7 +12,7 @@ namespace Stamp.CLI.Template.Builders
 
         public List<ParameterBuilder> Parameters { get; set; }
 
-        public Template Build()
+        public ITemplate Build()
         {
             return new Template( this.Name,
                 this.Version,

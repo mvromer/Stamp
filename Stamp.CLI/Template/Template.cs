@@ -8,39 +8,35 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace Stamp.CLI.Template
 {
-    class Template
+    class Template : ITemplate
     {
-        internal string Name { get; }
+        public string Name { get; }
 
-        internal SemVersion Version { get; }
+        public SemVersion Version { get; }
 
-        internal IReadOnlyList<Parameter> Parameters { get; }
+        public IReadOnlyList<IParameter> Parameters { get; }
 
-        internal static Template CreateFromManifest( string manifestPath )
+        internal static ITemplate CreateFromManifest( string manifestPath )
         {
             using( var reader = File.OpenText( manifestPath ) )
                 return CreateFromReader( reader );
         }
 
-        internal static Template CreateFromReader( TextReader reader )
+        internal static ITemplate CreateFromReader( TextReader reader )
         {
-            // Remove SystemTypeConverter because it depends on a YAML value being the type's
-            // assembly qualified name, and Stamp only needs to support a limited set of types
-            // specified using simple names (e.g., string, float, int, etc.).
             var deserializer = new DeserializerBuilder()
                     .WithNamingConvention( new CamelCaseNamingConvention() )
-                    .WithoutTypeConverter<SystemTypeConverter>()
-                    .WithTypeConverter( new TypeTypeConverter() )
+                    .WithTypeConverter( new TypeCodeTypeConverter() )
                     .Build();
 
             return deserializer.Deserialize<Builders.TemplateBuilder>( reader ).Build();
         }
 
-        internal Template( string name, SemVersion version, IList<Parameter> parameters )
+        internal Template( string name, SemVersion version, IList<IParameter> parameters )
         {
             this.Name = name;
             this.Version = version;
-            this.Parameters = new ReadOnlyCollection<Parameter>( parameters );
+            this.Parameters = new ReadOnlyCollection<IParameter>( parameters );
         }
     }
 }

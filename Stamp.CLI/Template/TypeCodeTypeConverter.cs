@@ -6,47 +6,48 @@ using YamlDotNet.Serialization;
 namespace Stamp.CLI.Template
 {
     /// <summary>
-    /// Converter used for converting YAML values to System.Type objects.
+    /// Converter used for converting YAML values to System.TypeCode values.
     /// </summary>
     /// <remarks>
-    /// Stamp supports converting to the following values to their corresponding System.Type object:
+    /// Stamp supports converting to the following values to their corresponding System.TypeCode
+    /// value:
     ///
-    ///   int - System.Int32
-    ///   float - System.Single
-    ///   string - System.String
-    ///   bool - System.Boolean
+    ///   int - TypeCode.Int32
+    ///   float - TypeCode.Single
+    ///   string - TypeCode.String
+    ///   bool - TypeCode.Boolean
     ///
     /// This only supports deserialization. Serialization support is not implemented.
     /// </remarks>
-    class TypeTypeConverter : IYamlTypeConverter
+    class TypeCodeTypeConverter : IYamlTypeConverter
     {
         public bool Accepts( Type type )
         {
-            return type == typeof( Type );
+            return type == typeof( TypeCode );
         }
 
         public object ReadYaml( IParser parser, Type type )
         {
-            object parsedType = null;
+            TypeCode parsedTypeCode = TypeCode.Empty;
 
             if( parser.Current is Scalar scalar )
             {
                 switch( scalar.Value )
                 {
                     case "int":
-                        parsedType = typeof( int );
+                        parsedTypeCode = TypeCode.Int32;
                         break;
 
                     case "float":
-                        parsedType = typeof( float );
+                        parsedTypeCode = TypeCode.Single;
                         break;
 
                     case "string":
-                        parsedType = typeof( string );
+                        parsedTypeCode = TypeCode.String;
                         break;
 
                     case "bool":
-                        parsedType = typeof( bool );
+                        parsedTypeCode = TypeCode.Boolean;
                         break;
 
                     default:
@@ -55,7 +56,7 @@ namespace Stamp.CLI.Template
             }
 
             parser.MoveNext();
-            return parsedType;
+            return parsedTypeCode;
         }
 
         public void WriteYaml( IEmitter emitter, object value, Type type )
