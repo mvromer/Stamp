@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using YamlDotNet.Serialization;
 
 namespace Stamp.CLI.Template.Builders
@@ -12,29 +14,36 @@ namespace Stamp.CLI.Template.Builders
 
         public bool? Required { get; set; }
 
+        public List<IValidatorBuilder> Validators { get; set; }
+
         public IParameter Build()
         {
-            string name = this.Name;
-            bool required = this.Required.HasValue ? this.Required.Value : true;
-
             switch( this.TypeCode )
             {
                 case TypeCode.Int32:
-                    return new Parameter<int>( name, required );
+                    return BuildParameter<int>();
 
                 case TypeCode.Single:
-                    return new Parameter<float>( name, required );
+                    return BuildParameter<float>();
 
                 case TypeCode.String:
-                    return new Parameter<string>( name, required );
+                    return BuildParameter<string>();
 
                 case TypeCode.Boolean:
-                    return new Parameter<bool>( name, required );
+                    return BuildParameter<bool>();
 
                 default:
                     var codeName = Enum.GetName( typeof(TypeCode), this.TypeCode );
                     throw new NotSupportedException( $"Unexpected type code '{codeName}'." );
             }
+        }
+
+        private IParameter BuildParameter<T>()
+        {
+            string name = this.Name;
+            bool required = this.Required.HasValue ? this.Required.Value : true;
+            var validators = (this.Validators ?? new List<IValidatorBuilder>()).Select( v => v.Build<T>() ).ToList();
+            return new Parameter<T>( name, required, validators );
         }
     }
 }

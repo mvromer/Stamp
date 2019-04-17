@@ -102,6 +102,11 @@ parameters:
 - name: projectName
   type: string
   required: true
+  validators:
+  - !choice
+    values:
+    - yes
+    - no
 
 files:
 - path: 'run.sh'

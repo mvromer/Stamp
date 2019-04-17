@@ -27,6 +27,7 @@ namespace Stamp.CLI.Template
             var deserializer = new DeserializerBuilder()
                     .WithNamingConvention( new CamelCaseNamingConvention() )
                     .WithTypeConverter( new TypeCodeTypeConverter() )
+                    .WithTagMapping( Builders.ChoiceValidatorBuilder.Tag, typeof(Builders.ChoiceValidatorBuilder) )
                     .Build();
 
             return deserializer.Deserialize<Builders.TemplateBuilder>( reader ).Build();

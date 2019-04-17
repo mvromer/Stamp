@@ -5,6 +5,7 @@ using FluentAssertions;
 using Xunit;
 
 using Stamp.CLI.Template;
+using Stamp.CLI.Template.Validators;
 
 namespace Stamp.Tests
 {
@@ -31,6 +32,11 @@ parameters:
 
 - name: stringVar
   type: string
+  validators:
+  - !choice
+    values:
+    - yes
+    - no
 ";
             using( var reader = new StringReader( manifest ) )
             {
@@ -61,6 +67,8 @@ parameters:
 
                         case "stringVar":
                             p.Required.Should().Be( true );
+                            p.Validators.Count.Should().Be( 1 );
+                            p.Validators[0].GetType().Should().Be( typeof(ChoiceValidator<string>) );
                             break;
                     }
                 }
