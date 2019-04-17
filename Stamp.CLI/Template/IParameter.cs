@@ -7,7 +7,10 @@ namespace Stamp.CLI.Template
         string Name { get; }
 
         bool Required { get; }
+    }
 
-        IReadOnlyList<IValidator> Validators { get; }
+    interface IParameter<T> : IParameter
+    {
+        IReadOnlyList<IValidator<T>> Validators { get; }
     }
 }

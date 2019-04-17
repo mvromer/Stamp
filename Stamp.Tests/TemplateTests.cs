@@ -67,8 +67,9 @@ parameters:
 
                         case "stringVar":
                             p.Required.Should().Be( true );
-                            p.Validators.Count.Should().Be( 1 );
-                            p.Validators[0].GetType().Should().Be( typeof(ChoiceValidator<string>) );
+                            p.GetType().Should().Be( typeof(Parameter<string>) );
+                            ((IParameter<string>)p).Validators.Count.Should().Be( 1 );
+                            ((IParameter<string>)p).Validators[0].GetType().Should().Be( typeof(ChoiceValidator<string>) );
                             break;
                     }
                 }

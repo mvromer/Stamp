@@ -1,7 +1,7 @@
 namespace Stamp.CLI.Template
 {
-    interface IValidator
+    interface IValidator<T>
     {
-        bool Validate( );
+        bool Validate( T value );
     }
 }

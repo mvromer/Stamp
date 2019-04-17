@@ -11,7 +11,7 @@ namespace Stamp.CLI.Template.Builders
         [YamlMember( Alias = "values" )]
         public List<string> ValidValues { get; set; }
 
-        public IValidator Build<T>()
+        public IValidator<T> Build<T>()
         {
             var validValues = new List<T>();
             foreach( var value in this.ValidValues )
