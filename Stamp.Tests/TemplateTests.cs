@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using FluentAssertions;
 using Xunit;
 
@@ -69,7 +70,7 @@ parameters:
                             p.Required.Should().Be( true );
                             p.GetType().Should().Be( typeof(Parameter<string>) );
                             ((IParameter<string>)p).Validators.Count.Should().Be( 1 );
-                            ((IParameter<string>)p).Validators[0].GetType().Should().Be( typeof(ChoiceValidator<string>) );
+                            ((IParameter<string>)p).Validators.First().GetType().Should().Be( typeof(ChoiceValidator<string>) );
                             break;
                     }
                 }
