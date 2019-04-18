@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using FluentAssertions;
@@ -13,11 +14,57 @@ namespace Stamp.Tests
     public class TemplateTests
     {
         [Fact]
+        public void TestItCanReadMinimalManifest()
+        {
+            var manifest = @"
+name: FooTemplate
+version: 1.0.0
+";
+
+            using( var reader = new StringReader( manifest ) )
+            {
+                var t = Template.CreateFromReader( reader );
+                t.Name.Should().Be( "FooTemplate" );
+                t.Version.Should().Be( "1.0.0" );
+            }
+        }
+
+        [Fact]
+        public void TestItFailsWhenMissingTemplateName()
+        {
+            var manifest = @"
+version: 1.0.0
+";
+
+            using( var reader = new StringReader( manifest ) )
+            {
+                Action act = () => Template.CreateFromReader( reader );
+                act.Should().Throw<YamlDotNet.Core.YamlException>()
+                    .WithInnerException<ValidationException>();
+            }
+        }
+
+        [Fact]
+        public void TestItFailsWhenMissingTemplateVersion()
+        {
+            var manifest = @"
+name: FooTemplate
+";
+
+            using( var reader = new StringReader( manifest ) )
+            {
+                Action act = () => Template.CreateFromReader( reader );
+                act.Should().Throw<YamlDotNet.Core.YamlException>()
+                    .WithInnerException<ValidationException>();
+            }
+        }
+
+        [Fact]
         public void TestItCanCreateManifestFromValidYaml()
         {
             var manifest = @"
 name: FooTemplate
-version: 1.2.3
+version: 1.0.0
 
 parameters:
 - name: intVar

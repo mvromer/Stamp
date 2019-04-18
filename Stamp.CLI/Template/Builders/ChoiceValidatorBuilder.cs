@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using YamlDotNet.Serialization;
 
 namespace Stamp.CLI.Template.Builders
@@ -8,6 +9,7 @@ namespace Stamp.CLI.Template.Builders
     {
         internal static readonly string Tag = "!choice";
 
+        [Required]
         [YamlMember( Alias = "values" )]
         public List<string> ValidValues { get; set; }
 

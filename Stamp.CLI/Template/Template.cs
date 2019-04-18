@@ -5,6 +5,7 @@ using Semver;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.Converters;
 using YamlDotNet.Serialization.NamingConventions;
+using YamlDotNet.Serialization.NodeDeserializers;
 
 namespace Stamp.CLI.Template
 {
@@ -25,10 +26,13 @@ namespace Stamp.CLI.Template
         internal static ITemplate CreateFromReader( TextReader reader )
         {
             var deserializer = new DeserializerBuilder()
-                    .WithNamingConvention( new CamelCaseNamingConvention() )
-                    .WithTypeConverter( new TypeCodeTypeConverter() )
-                    .WithTagMapping( Builders.ChoiceValidatorBuilder.Tag, typeof(Builders.ChoiceValidatorBuilder) )
-                    .Build();
+                .WithNamingConvention( new CamelCaseNamingConvention() )
+                .WithNodeDeserializer( inner => new ValidatingNodeDeserializer( inner ),
+                    s => s.InsteadOf<ObjectNodeDeserializer>() )
+                .WithTypeConverter( new TypeCodeTypeConverter() )
+                .WithTagMapping( Builders.ChoiceValidatorBuilder.Tag,
+                    typeof(Builders.ChoiceValidatorBuilder) )
+                .Build();
 
             return deserializer.Deserialize<Builders.TemplateBuilder>( reader ).Build();
         }
