@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using FluentAssertions;
 using Xunit;
+using YamlDotNet.Core;
 
 using Stamp.CLI.Template;
 using Stamp.CLI.Template.Validators;
@@ -26,6 +27,7 @@ version: 1.0.0
                 var t = Template.CreateFromReader( reader );
                 t.Name.Should().Be( "FooTemplate" );
                 t.Version.Should().Be( "1.0.0" );
+                t.Parameters.Any().Should().BeFalse();
             }
         }
 
@@ -39,7 +41,7 @@ version: 1.0.0
             using( var reader = new StringReader( manifest ) )
             {
                 Action act = () => Template.CreateFromReader( reader );
-                act.Should().Throw<YamlDotNet.Core.YamlException>()
+                act.Should().Throw<YamlException>()
                     .WithInnerException<ValidationException>();
             }
         }
@@ -54,75 +56,190 @@ name: FooTemplate
             using( var reader = new StringReader( manifest ) )
             {
                 Action act = () => Template.CreateFromReader( reader );
-                act.Should().Throw<YamlDotNet.Core.YamlException>()
+                act.Should().Throw<YamlException>()
                     .WithInnerException<ValidationException>();
             }
         }
 
         [Fact]
-        public void TestItCanCreateManifestFromValidYaml()
+        public void TestItCanReadSimpleIntParameterFromManifest()
         {
             var manifest = @"
 name: FooTemplate
 version: 1.0.0
 
 parameters:
-- name: intVar
+- name: intParam
   type: int
-  required: false
-
-- name: floatVar
-  type: float
-  required: true
-
-- name: boolVar
-  type: bool
-
-- name: stringVar
-  type: string
-  validators:
-  - !choice
-    values:
-    - yes
-    - no
 ";
+
             using( var reader = new StringReader( manifest ) )
             {
                 var t = Template.CreateFromReader( reader );
-                t.Name.Should().Be( "FooTemplate" );
-                t.Version.Should().Be( "1.2.3" );
-                t.Parameters.Count.Should().Be( 4 );
+                t.Parameters.Count.Should().Be( 1 );
+                t.Parameters.First().Should().BeOfType<Parameter<int>>();
 
-                var expectedNames = new List<string> { "intVar", "floatVar", "boolVar", "stringVar" };
+                var p = (Parameter<int>)t.Parameters.First();
+                p.Name.Should().Be( "intParam" );
+                p.Required.Should().BeTrue();
+            }
+        }
 
-                foreach( var p in t.Parameters )
-                {
-                    expectedNames.Remove( p.Name ).Should().Be( true );
+        [Fact]
+        public void TestItCanReadIntParameterWithValidChoiceValidatorFromManifest()
+        {
+            var manifest = @"
+name: FooTemplate
+version: 1.0.0
 
-                    switch( p.Name )
-                    {
-                        case "intVar":
-                            p.Required.Should().Be( false );
-                            break;
+parameters:
+- name: intParam
+  type: int
+  validators:
+  - !choice
+    values:
+    - 0
+    - 1
+    - 10
+";
 
-                        case "floatVar":
-                            p.Required.Should().Be( true );
-                            break;
+            using( var reader = new StringReader( manifest ) )
+            {
+                var t = Template.CreateFromReader( reader );
+                t.Parameters.Count.Should().Be( 1 );
+                t.Parameters.First().Should().BeOfType<Parameter<int>>();
 
-                        case "boolVar":
-                            p.Required.Should().Be( true );
-                            break;
+                var p = (Parameter<int>)t.Parameters.First();
+                p.Name.Should().Be( "intParam" );
+                p.Required.Should().BeTrue();
+                p.Validators.Count.Should().Be( 1 );
+                p.Validators.First().Should().BeOfType<ChoiceValidator<int>>();
 
-                        case "stringVar":
-                            p.Required.Should().Be( true );
-                            p.GetType().Should().Be( typeof(Parameter<string>) );
-                            ((IParameter<string>)p).Validators.Count.Should().Be( 1 );
-                            ((IParameter<string>)p).Validators.First().GetType().Should().Be( typeof(ChoiceValidator<string>) );
-                            break;
-                    }
-                }
+                var v = (ChoiceValidator<int>)p.Validators.First();
+                v.Validate( 0 ).Should().BeTrue();
+                v.Validate( 1 ).Should().BeTrue();
+                v.Validate( 10 ).Should().BeTrue();
+                v.Validate( 10000 ).Should().BeFalse();
+            }
+        }
 
-                expectedNames.Count.Should().Be( 0 );
+        [Fact]
+        public void TestItFailsWhenChoiceValidatorValuesDoNotMatchParameterType()
+        {
+            var manifest = @"
+name: FooTemplate
+version: 1.0.0
+
+parameters:
+- name: intParam
+  type: int
+  validators:
+  - !choice
+    values:
+    - 0
+    - badValue
+";
+
+            using( var reader = new StringReader( manifest ) )
+            {
+                Action act = () => Template.CreateFromReader( reader );
+                act.Should().Throw<InvalidCastException>();
+            }
+        }
+
+        [Fact]
+        public void TestItCanReadSimpleStringParameterFromManifest()
+        {
+            var manifest = @"
+name: FooTemplate
+version: 1.0.0
+
+parameters:
+- name: stringParam
+  type: string
+";
+
+            using( var reader = new StringReader( manifest ) )
+            {
+                var t = Template.CreateFromReader( reader );
+                t.Parameters.Count.Should().Be( 1 );
+                t.Parameters.First().Should().BeOfType<Parameter<string>>();
+
+                var p = (Parameter<string>)t.Parameters.First();
+                p.Name.Should().Be( "stringParam" );
+                p.Required.Should().BeTrue();
+            }
+        }
+
+        [Fact]
+        public void TestItCanReadSimpleFloatParameterFromManifest()
+        {
+            var manifest = @"
+name: FooTemplate
+version: 1.0.0
+
+parameters:
+- name: floatParam
+  type: float
+";
+
+            using( var reader = new StringReader( manifest ) )
+            {
+                var t = Template.CreateFromReader( reader );
+                t.Parameters.Count.Should().Be( 1 );
+                t.Parameters.First().Should().BeOfType<Parameter<float>>();
+
+                var p = (Parameter<float>)t.Parameters.First();
+                p.Name.Should().Be( "floatParam" );
+                p.Required.Should().BeTrue();
+            }
+        }
+
+        [Fact]
+        public void TestItCanReadSimpleBoolParameterFromManifest()
+        {
+            var manifest = @"
+name: FooTemplate
+version: 1.0.0
+
+parameters:
+- name: boolParam
+  type: bool
+";
+
+            using( var reader = new StringReader( manifest ) )
+            {
+                var t = Template.CreateFromReader( reader );
+                t.Parameters.Count.Should().Be( 1 );
+                t.Parameters.First().Should().BeOfType<Parameter<bool>>();
+
+                var p = (Parameter<bool>)t.Parameters.First();
+                p.Name.Should().Be( "boolParam" );
+                p.Required.Should().BeTrue();
+            }
+        }
+
+        [Fact]
+        public void TestItCanReadRequiredParameterFieldFromManifest()
+        {
+            var manifest = @"
+name: FooTemplate
+version: 1.0.0
+
+parameters:
+- name: notRequiredParam
+  type: int
+  required: false
+";
+
+            using( var reader = new StringReader( manifest ) )
+            {
+                var t = Template.CreateFromReader( reader );
+                t.Parameters.Count.Should().Be( 1 );
+                t.Parameters.First().Should().BeOfType<Parameter<int>>();
+
+                var p = (Parameter<int>)t.Parameters.First();
+                p.Required.Should().BeFalse();
             }
         }
     }
