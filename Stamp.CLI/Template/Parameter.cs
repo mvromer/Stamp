@@ -12,10 +12,13 @@ namespace Stamp.CLI.Template
 
         public IReadOnlyCollection<IValidator<T>> Validators { get; }
 
-        internal Parameter( string name, bool required, IList<IValidator<T>> validators )
+        public T DefaultValue { get; }
+
+        internal Parameter( string name, bool required, T defaultValue, IList<IValidator<T>> validators )
         {
             this.Name = name;
             this.Required = required;
+            this.DefaultValue = defaultValue;
             this.Validators = new ReadOnlyCollection<IValidator<T>>( validators );
         }
     }

@@ -82,6 +82,7 @@ parameters:
                 var p = (Parameter<int>)t.Parameters.First();
                 p.Name.Should().Be( "intParam" );
                 p.Required.Should().BeTrue();
+                p.DefaultValue.Should().Be( 0 );
             }
         }
 
@@ -168,6 +169,7 @@ parameters:
                 var p = (Parameter<string>)t.Parameters.First();
                 p.Name.Should().Be( "stringParam" );
                 p.Required.Should().BeTrue();
+                p.DefaultValue.Should().BeNull();
             }
         }
 
@@ -192,6 +194,7 @@ parameters:
                 var p = (Parameter<float>)t.Parameters.First();
                 p.Name.Should().Be( "floatParam" );
                 p.Required.Should().BeTrue();
+                p.DefaultValue.Should().Be( 0.0f );
             }
         }
 
@@ -216,6 +219,7 @@ parameters:
                 var p = (Parameter<bool>)t.Parameters.First();
                 p.Name.Should().Be( "boolParam" );
                 p.Required.Should().BeTrue();
+                p.DefaultValue.Should().BeFalse();
             }
         }
 
@@ -240,6 +244,30 @@ parameters:
 
                 var p = (Parameter<int>)t.Parameters.First();
                 p.Required.Should().BeFalse();
+            }
+        }
+
+        [Fact]
+        public void TestItCanReadDefaultParameterFieldFromManifest()
+        {
+            var manifest = @"
+name: FooTemplate
+version: 1.0.0
+
+parameters:
+- name: explicitDefaultParam
+  type: int
+  default: 100
+";
+
+            using( var reader = new StringReader( manifest ) )
+            {
+                var t = Template.CreateFromReader( reader );
+                t.Parameters.Count.Should().Be( 1 );
+                t.Parameters.First().Should().BeOfType<Parameter<int>>();
+
+                var p = (Parameter<int>)t.Parameters.First();
+                p.DefaultValue.Should().Be( 100 );
             }
         }
     }

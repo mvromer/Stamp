@@ -17,6 +17,9 @@ namespace Stamp.CLI.Template.Builders
 
         public bool? Required { get; set; }
 
+        [YamlMember( Alias = "default" )]
+        public string DefaultValue { get; set; }
+
         public List<IValidatorBuilder> Validators { get; set; }
 
         public IParameter Build()
@@ -46,7 +49,28 @@ namespace Stamp.CLI.Template.Builders
             string name = this.Name;
             bool required = this.Required.HasValue ? this.Required.Value : true;
             var validators = (this.Validators ?? new List<IValidatorBuilder>()).Select( v => v.Build<T>() ).ToList();
-            return new Parameter<T>( name, required, validators );
+            T defaultValue;
+
+            // If a default value was specified, we want to make sure that it's valid with respect
+            // to the data type declared for the associated parameter.
+            if( this.DefaultValue != null )
+            {
+                try
+                {
+                    defaultValue = (T)Convert.ChangeType( this.DefaultValue, typeof(T) );
+                }
+                catch( Exception ex )
+                {
+                    throw new InvalidCastException(
+                        $"Cannot convert default value '{this.DefaultValue}' to parameter type '{typeof(T).Name}'.", ex );
+                }
+            }
+            else
+            {
+                defaultValue = default(T);
+            }
+
+            return new Parameter<T>( name, required, defaultValue, validators );
         }
     }
 }
