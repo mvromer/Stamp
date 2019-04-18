@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Stamp.CLI.Template.Validators
 {
@@ -12,7 +13,7 @@ namespace Stamp.CLI.Template.Validators
 
         public bool Validate( T value )
         {
-            throw new System.NotImplementedException();
+            return this.ValidValues.Contains( value );
         }
 
         private IReadOnlyList<T> ValidValues { get; }
