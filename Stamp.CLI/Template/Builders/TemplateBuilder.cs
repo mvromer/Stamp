@@ -15,7 +15,7 @@ namespace Stamp.CLI.Template.Builders
 
         public List<ParameterBuilder> Parameters { get; set; }
 
-        public ITemplate Build()
+        internal ITemplate Build()
         {
             var parameters = (this.Parameters ?? new List<ParameterBuilder>()).Select( p => p.Build() ).ToList();
             return new Template( this.Name,

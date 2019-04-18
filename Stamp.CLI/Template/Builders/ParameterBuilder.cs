@@ -22,7 +22,7 @@ namespace Stamp.CLI.Template.Builders
 
         public List<IValidatorBuilder> Validators { get; set; }
 
-        public IParameter Build()
+        internal IParameter Build()
         {
             switch( this.TypeCode )
             {
