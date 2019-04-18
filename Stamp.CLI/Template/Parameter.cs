@@ -10,7 +10,7 @@ namespace Stamp.CLI.Template
 
         public bool Required { get; }
 
-        public IReadOnlyList<IValidator<T>> Validators { get; }
+        public IReadOnlyCollection<IValidator<T>> Validators { get; }
 
         internal Parameter( string name, bool required, IList<IValidator<T>> validators )
         {

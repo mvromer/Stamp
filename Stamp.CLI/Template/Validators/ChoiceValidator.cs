@@ -16,6 +16,6 @@ namespace Stamp.CLI.Template.Validators
             return this.ValidValues.Contains( value );
         }
 
-        private IReadOnlyList<T> ValidValues { get; }
+        private IReadOnlyCollection<T> ValidValues { get; }
     }
 }

@@ -11,6 +11,6 @@ namespace Stamp.CLI.Template
 
     interface IParameter<T> : IParameter
     {
-        IReadOnlyList<IValidator<T>> Validators { get; }
+        IReadOnlyCollection<IValidator<T>> Validators { get; }
     }
 }

@@ -9,6 +9,6 @@ namespace Stamp.CLI.Template
 
         SemVersion Version { get; }
 
-        IReadOnlyList<IParameter> Parameters { get; }
+        IReadOnlyCollection<IParameter> Parameters { get; }
     }
 }

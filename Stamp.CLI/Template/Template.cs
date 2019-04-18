@@ -14,7 +14,7 @@ namespace Stamp.CLI.Template
 
         public SemVersion Version { get; }
 
-        public IReadOnlyList<IParameter> Parameters { get; }
+        public IReadOnlyCollection<IParameter> Parameters { get; }
 
         internal static ITemplate CreateFromManifest( string manifestPath )
         {
