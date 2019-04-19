@@ -7,7 +7,7 @@ namespace Stamp.CLI.Script
         internal ComputedString( string value )
         {
             this.Value = value;
-            m_computedValue = new Lazy<string>( () => ComputeValue( value ) );
+            m_computedValue = new Lazy<string>( () => ComputeValue() );
         }
 
         internal string Value { get; }
@@ -19,9 +19,9 @@ namespace Stamp.CLI.Script
 
         private Lazy<string> m_computedValue;
 
-        private static string ComputeValue( string value )
+        private string ComputeValue()
         {
-            return value;
+            return this.Value;
         }
     }
 }

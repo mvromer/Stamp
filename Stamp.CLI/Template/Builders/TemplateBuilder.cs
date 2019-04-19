@@ -15,12 +15,19 @@ namespace Stamp.CLI.Template.Builders
 
         public List<ParameterBuilder> Parameters { get; set; }
 
+        public List<FileBuilder> Files { get; set; }
+
         internal ITemplate Build()
         {
             var parameters = (this.Parameters ?? new List<ParameterBuilder>()).Select( p => p.Build() ).ToList();
-            return new Template( this.Name,
+            var files = (this.Files ?? new List<FileBuilder>()).Select( f => f.Build() ).ToList();
+
+            return new Template(
+                this.Name,
                 this.Version,
-                parameters );
+                parameters,
+                files
+            );
         }
     }
 }

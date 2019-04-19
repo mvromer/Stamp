@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using FluentAssertions;
+using PathLib;
 using Xunit;
 using YamlDotNet.Core;
 
@@ -268,6 +269,118 @@ parameters:
 
                 var p = (Parameter<int>)t.Parameters.First();
                 p.DefaultValue.Should().Be( 100 );
+            }
+        }
+
+        [Fact]
+        public void TestItCanReadSimpleFileFromManifest()
+        {
+            var manifest = @"
+name: FooTemplate
+version: 1.0.0
+
+files:
+- path: path/to/file.txt
+";
+
+            using( var reader = new StringReader( manifest ) )
+            {
+                var t = Template.CreateFromReader( reader );
+                t.Files.Count.Should().Be( 1 );
+
+                var f = t.Files.First();
+                f.Path.Should().Be( "path/to/file.txt" );
+                f.Computed.Should().BeFalse();
+                f.OutputDirectory.Value.Should().Be( "path/to" );
+                f.OutputName.Value.Should().Be( "file.txt" );
+
+                var outputPath = new PurePosixPath( f.OutputDirectory.Value, f.OutputName.Value );
+                f.Path.Should().Be( outputPath.ToString() );
+            }
+        }
+
+        [Fact]
+        public void TestItCanReadComputedFileFromManifest()
+        {
+            var manifest = @"
+name: FooTemplate
+version: 1.0.0
+
+files:
+- path: path/to/file.txt
+  computed: true
+";
+
+            using( var reader = new StringReader( manifest ) )
+            {
+                var t = Template.CreateFromReader( reader );
+                t.Files.Count.Should().Be( 1 );
+
+                var f = t.Files.First();
+                f.Computed.Should().BeTrue();
+            }
+        }
+
+        [Fact]
+        public void TestItCanReadOutputDirectoryFromManifest()
+        {
+            var manifest = @"
+name: FooTemplate
+version: 1.0.0
+
+files:
+- path: path/to/file.txt
+  outputDir: new/path/to
+";
+
+            using( var reader = new StringReader( manifest ) )
+            {
+                var t = Template.CreateFromReader( reader );
+                t.Files.Count.Should().Be( 1 );
+
+                var f = t.Files.First();
+                f.OutputDirectory.Value.Should().Be( "new/path/to" );
+            }
+        }
+
+        [Fact]
+        public void TestItCanReadOutputNameFromManifest()
+        {
+            var manifest = @"
+name: FooTemplate
+version: 1.0.0
+
+files:
+- path: path/to/file.txt
+  outputName: newFile.txt
+";
+
+            using( var reader = new StringReader( manifest ) )
+            {
+                var t = Template.CreateFromReader( reader );
+                t.Files.Count.Should().Be( 1 );
+
+                var f = t.Files.First();
+                f.OutputName.Value.Should().Be( "newFile.txt" );
+            }
+        }
+
+        [Fact]
+        public void TestItFailsWhenOutputNameContainsDirectory()
+        {
+            var manifest = @"
+name: FooTemplate
+version: 1.0.0
+
+files:
+- path: path/to/file.txt
+  outputName: new/path/to/newFile.txt
+";
+
+            using( var reader = new StringReader( manifest ) )
+            {
+                Action act = () => Template.CreateFromReader( reader );
+                act.Should().Throw<NotSupportedException>();
             }
         }
     }

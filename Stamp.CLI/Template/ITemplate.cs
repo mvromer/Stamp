@@ -10,5 +10,7 @@ namespace Stamp.CLI.Template
         SemVersion Version { get; }
 
         IReadOnlyCollection<IParameter> Parameters { get; }
+
+        IReadOnlyCollection<IFile> Files { get; }
     }
 }
