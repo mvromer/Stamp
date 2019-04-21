@@ -38,6 +38,13 @@ manifest. Once all post-hook scripts are complete, Stamp terminates.
 ## Commands
 * `new <template name>` - Generate a new instance of the named template.
   * `--output <output directory>` - Specify the output directory for the new instance.
+* `list [<repository name>]` - List all templates available through the named repository. If no
+  repoistory name is given, then templates available through all configured repositories will be
+  listed.
+* `publish <repo name>` - Publishes the template in the current directory to the named repository.
+  This assumes a template manifest file will be found in the current directory.
+  * `--template-path <path>` - Specify the path to the template directory to publish. This assumes a
+    template manifest file will be found in the specified `<path>`.
 * `repo [list]` - List all configured repositories.
   * `repo add <repo URL> [<repo name>]` - Configures a new repository. If no name is given, then it
     is pulled from the repo's URL. The name must be a single word and unique amongst all previously
@@ -78,6 +85,10 @@ A Stamp repo is expected to have the following layout:
 
 At the root is a directory named `templates` that stores each of the templates sourced by that
 repository. Each template is stored in its own directory named `<template name>V<major version>`.
+
+## Local repository
+Stamp reserves the name `local` for a special repository that is always available. The local
+repository resides only on the local machine and does not have an upstream URL.
 
 ## Template structure
 Each template folder has the following structure:
