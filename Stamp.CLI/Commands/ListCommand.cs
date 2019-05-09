@@ -1,6 +1,9 @@
-using Microsoft.Extensions.Logging;
+using System;
 
 using McMaster.Extensions.CommandLineUtils;
+using Microsoft.Extensions.Logging;
+
+using Stamp.CLI.Config;
 
 namespace Stamp.CLI.Commands
 {
@@ -17,9 +20,18 @@ namespace Stamp.CLI.Commands
             this.Logger = logger;
         }
 
-        private int OnExecute()
+        private int OnExecute( IConsole console )
         {
-            return 0;
+            try
+            {
+                var stampConfig = StampConfig.Load();
+                return 0;
+            }
+            catch( Exception ex )
+            {
+                this.Logger.LogError( ex, "Failed to list available templates." );
+                return 1;
+            }
         }
 
         private ILogger<ListCommand> Logger { get; }
