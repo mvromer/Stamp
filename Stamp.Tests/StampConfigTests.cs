@@ -23,6 +23,7 @@ namespace Stamp.Tests
             repositories.Should().NotBeNull();
             repositories.Count.Should().Be( 1 );
             repositories.First().Name.Should().Be( ".local" );
+            repositories.First().Description.Should().Be( "Local repository" );
         }
     }
 }

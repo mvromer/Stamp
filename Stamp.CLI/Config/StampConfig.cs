@@ -48,7 +48,7 @@ namespace Stamp.CLI.Config
         {
             return new List<IRepository>
             {
-                new Repository.Repository( Repository.Repository.LocalRepositoryName )
+                new Repository.Repository( name: ".local", description: "Local repository" )
             };
         }
 

@@ -2,13 +2,14 @@ namespace Stamp.CLI.Repository
 {
     class Repository : IRepository
     {
-        internal const string LocalRepositoryName = ".local";
-
         public string Name { get; }
 
-        internal Repository( string name )
+        public string Description { get; }
+
+        internal Repository( string name, string description )
         {
             this.Name = name;
+            this.Description = description;
         }
     }
 }
