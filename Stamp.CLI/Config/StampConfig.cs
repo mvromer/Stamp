@@ -25,7 +25,6 @@ namespace Stamp.CLI.Config
             {
                 const string RepositoryConfigFileName = "repositories.yml";
                 var repoConfigPath = this.RootDir.WithFilename( RepositoryConfigFileName );
-
                 using( var repoConfigFile = repoConfigPath.Open( FileMode.Open ) )
                 {
                     // TODO: Implement repository config file parsing.
