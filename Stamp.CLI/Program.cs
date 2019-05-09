@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+
 using McMaster.Extensions.CommandLineUtils;
 
 [assembly: CLSCompliant( isCompliant: false )]
@@ -13,8 +17,22 @@ namespace Stamp.CLI
     [Subcommand( typeof(Commands.RepoCommand) )]
     class Program
     {
-        static void Main( string[] args ) =>
-            CommandLineApplication.Execute<Program>( args );
+        static int Main( string[] args )
+        {
+            var services = new ServiceCollection()
+                .AddLogging( builder => builder.AddConsole() )
+                .AddSingleton<IConsole>( PhysicalConsole.Singleton )
+                .BuildServiceProvider();
+
+            using( services )
+            {
+                var app = new CommandLineApplication<Program>();
+                app.Conventions
+                    .UseDefaultConventions()
+                    .UseConstructorInjection( services );
+                return app.Execute( args );
+            }
+        }
 
         private void OnExecute( CommandLineApplication app ) => app.ShowHelp();
     }

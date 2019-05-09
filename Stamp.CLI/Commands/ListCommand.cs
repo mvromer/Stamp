@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Logging;
+
 using McMaster.Extensions.CommandLineUtils;
 
 namespace Stamp.CLI.Commands
@@ -10,10 +12,16 @@ namespace Stamp.CLI.Commands
             description: "List templates available through the named repository." )]
         public string RepositoryName { get; }
 
-        private int OnExecute( IConsole console )
+        public ListCommand( ILogger<ListCommand> logger )
         {
-            console.WriteLine( $"Listing for {this.RepositoryName ?? "all"}" );
+            this.Logger = logger;
+        }
+
+        private int OnExecute()
+        {
             return 0;
         }
+
+        private ILogger<ListCommand> Logger { get; }
     }
 }
