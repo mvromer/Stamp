@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using PathLib;
 
 using Stamp.CLI.Repository;
@@ -19,13 +20,36 @@ namespace Stamp.CLI.Config
 
         public IReadOnlyCollection<IRepository> LoadRepositories()
         {
-            var repositories = new List<IRepository>();
+            var repositories = GetDefaultRepositories();
+            try
+            {
+                const string RepositoryConfigFileName = "repositories.yml";
+                var repoConfigPath = this.RootDir.WithFilename( RepositoryConfigFileName );
+
+                using( var repoConfigFile = repoConfigPath.Open( FileMode.Open ) )
+                {
+                }
+            }
+            catch( FileNotFoundException )
+            {
+                // Ignore this exception. We'll just return the default collection only contains the
+                // local repository.
+            }
+
             return new ReadOnlyCollection<IRepository>( repositories );
         }
 
         internal StampConfig( IPath rootDir )
         {
             this.RootDir = rootDir;
+        }
+
+        private IList<IRepository> GetDefaultRepositories()
+        {
+            return new List<IRepository>
+            {
+                new Repository.Repository( Repository.Repository.LocalRepositoryName )
+            };
         }
 
         private IPath RootDir { get; }

@@ -1,3 +1,4 @@
+using System.Linq;
 using FluentAssertions;
 using Xunit;
 
@@ -15,12 +16,13 @@ namespace Stamp.Tests
         }
 
         [Fact]
-        public void TestItCanLoadRepositories()
+        public void TestItCanLoadDefaultRepositories()
         {
             var stampConfig = StampConfig.Load();
             var repositories = stampConfig.LoadRepositories();
             repositories.Should().NotBeNull();
-            repositories.Count.Should().Be( 0 );
+            repositories.Count.Should().Be( 1 );
+            repositories.First().Name.Should().Be( ".local" );
         }
     }
 }
