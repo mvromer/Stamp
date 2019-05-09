@@ -28,6 +28,7 @@ namespace Stamp.CLI.Config
 
                 using( var repoConfigFile = repoConfigPath.Open( FileMode.Open ) )
                 {
+                    // TODO: Implement repository config file parsing.
                 }
             }
             catch( FileNotFoundException )
