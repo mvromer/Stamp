@@ -14,6 +14,7 @@ namespace Stamp.CLI
     [Command( Name = "stamp", Description = "Stamp template generator." )]
     [Subcommand( typeof(Commands.NewCommand) )]
     [Subcommand( typeof(Commands.ListCommand) )]
+    [Subcommand( typeof(Commands.PublishCommand) )]
     [Subcommand( typeof(Commands.RepoCommand) )]
     class Program
     {
