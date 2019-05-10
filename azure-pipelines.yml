@@ -1,0 +1,18 @@
+stages:
+- stage: BuildReleaseCandidate
+  displayName: Build Release Candidate
+  jobs:
+  - job: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: Build
+      inputs:
+        command: build
+
+    - task: DotNetCoreCLI@2
+      displayName: Run Unit Tests
+      inputs:
+        command: test
+        arguments: --no-build
