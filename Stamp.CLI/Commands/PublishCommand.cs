@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 
@@ -18,8 +21,22 @@ namespace Stamp.CLI.Commands
 
         private int OnExecute( IConsole console )
         {
-            console.WriteLine( $"Template directory to publish: {this.TemplateDirectory}" );
-            return 0;
+            try
+            {
+                string templateDir = string.IsNullOrEmpty( this.TemplateDirectory ) ?
+                    Directory.GetCurrentDirectory() : this.TemplateDirectory;
+
+                if( !Directory.Exists( templateDir ) )
+                    throw new DirectoryNotFoundException( $"The template directory {templateDir} does not exist." );
+
+                console.WriteLine( $"Template directory to publish: {templateDir}" );
+                return 0;
+            }
+            catch( Exception ex )
+            {
+                this.Logger.LogError( ex, "Failed to publish template." );
+                return 1;
+            }
         }
 
         private ILogger<PublishCommand> Logger { get; }
