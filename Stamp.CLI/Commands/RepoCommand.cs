@@ -1,4 +1,7 @@
+using System.Linq;
+
 using McMaster.Extensions.CommandLineUtils;
+using Microsoft.Extensions.Logging;
 
 namespace Stamp.CLI.Commands
 {
@@ -7,9 +10,13 @@ namespace Stamp.CLI.Commands
     [Subcommand( typeof(Repo.ListCommand) )]
     class RepoCommand
     {
-        private int OnExecute( IConsole console )
+        private int OnExecute( IConsole console, CommandLineApplication<RepoCommand> command )
         {
-            return Repo.ListCommand.ListRepositories( console ) ? 0 : 1;
+            const string ListRepoCommandName = "list";
+            return command.Commands
+                .Where( c => c.Name == ListRepoCommandName )
+                .First()
+                .Invoke();
         }
     }
 }
