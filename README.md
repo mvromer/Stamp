@@ -1,9 +1,12 @@
+[![Build Status](https://dev.azure.com/mvromer/Stamp/_apis/build/status/Build%20Release%20Candidate?branchName=master&label=Build%20Release%20Candidate)](https://dev.azure.com/mvromer/Stamp/_build/latest?definitionId=1?branchName=master)
+
 # Stamp
 Command line template generator that is:
 
 * Cross-platform
 * Language agnostic
 * Extensible
+
 
 ## How it works
 When Stamp is used to create a new instance of a template, it reads and processes the template's
