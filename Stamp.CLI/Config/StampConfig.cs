@@ -15,7 +15,7 @@ namespace Stamp.CLI.Config
             const string DefaultStampConfigFolderName = "stamp";
             var appDataPath = Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData,
                 Environment.SpecialFolderOption.Create );
-            return new StampConfig( Paths.Create( appDataPath, DefaultStampConfigFolderName ) );
+            return new StampConfig( PurePath.Create( appDataPath, DefaultStampConfigFolderName ) );
         }
 
         public IReadOnlyCollection<IRepository> LoadRepositories()
@@ -25,7 +25,8 @@ namespace Stamp.CLI.Config
             {
                 const string RepositoryConfigFileName = "repositories.yml";
                 var repoConfigPath = this.RootDir.WithFilename( RepositoryConfigFileName );
-                using( var repoConfigFile = repoConfigPath.Open( FileMode.Open ) )
+
+                using( var repoConfigFile = File.Open( repoConfigPath.ToString(), FileMode.Open ) )
                 {
                     // TODO: Implement repository config file parsing.
                 }
@@ -39,7 +40,7 @@ namespace Stamp.CLI.Config
             return new ReadOnlyCollection<IRepository>( repositories );
         }
 
-        internal StampConfig( IPath rootDir )
+        internal StampConfig( IPurePath rootDir )
         {
             this.RootDir = rootDir;
         }
@@ -52,6 +53,6 @@ namespace Stamp.CLI.Config
             };
         }
 
-        private IPath RootDir { get; }
+        private IPurePath RootDir { get; }
     }
 }
