@@ -3,8 +3,8 @@ using System.Runtime.CompilerServices;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-
 using McMaster.Extensions.CommandLineUtils;
+using System.IO.Abstractions;
 
 [assembly: CLSCompliant( isCompliant: false )]
 [assembly: InternalsVisibleTo( "Stamp.Tests" )]
@@ -23,6 +23,7 @@ namespace Stamp.CLI
             var services = new ServiceCollection()
                 .AddLogging( builder => builder.AddConsole() )
                 .AddSingleton<IConsole>( PhysicalConsole.Singleton )
+                .AddTransient<IFileSystem, FileSystem>()
                 .BuildServiceProvider();
 
             using( services )

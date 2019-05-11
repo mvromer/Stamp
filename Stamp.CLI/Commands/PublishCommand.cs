@@ -3,6 +3,7 @@ using System.IO;
 
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
+using System.IO.Abstractions;
 
 namespace Stamp.CLI.Commands
 {
@@ -14,19 +15,20 @@ namespace Stamp.CLI.Commands
             description: "Directory containing template to publish. Defaults to current directory." )]
         public string TemplateDirectory { get; }
 
-        public PublishCommand( ILogger<PublishCommand> logger )
+        public PublishCommand( ILogger<PublishCommand> logger, IFileSystem fileSystem )
         {
             this.Logger = logger;
+            this.FileSystem = fileSystem;
         }
 
         private int OnExecute( IConsole console )
         {
             try
             {
-                string templateDir = string.IsNullOrEmpty( this.TemplateDirectory ) ?
-                    Directory.GetCurrentDirectory() : this.TemplateDirectory;
+                var templateDir = string.IsNullOrEmpty( this.TemplateDirectory ) ?
+                    this.FileSystem.Directory.GetCurrentDirectory() : this.TemplateDirectory;
 
-                if( !Directory.Exists( templateDir ) )
+                if( !this.FileSystem.Directory.Exists( templateDir ) )
                     throw new DirectoryNotFoundException( $"The template directory {templateDir} does not exist." );
 
                 console.WriteLine( $"Template directory to publish: {templateDir}" );
@@ -40,5 +42,7 @@ namespace Stamp.CLI.Commands
         }
 
         private ILogger<PublishCommand> Logger { get; }
+
+        private IFileSystem FileSystem { get; }
     }
 }
