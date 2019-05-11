@@ -5,6 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using McMaster.Extensions.CommandLineUtils;
 using System.IO.Abstractions;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
+using YamlDotNet.Serialization.NodeDeserializers;
 
 [assembly: CLSCompliant( isCompliant: false )]
 [assembly: InternalsVisibleTo( "Stamp.Tests" )]
@@ -24,6 +27,15 @@ namespace Stamp.CLI
                 .AddLogging( builder => builder.AddConsole() )
                 .AddSingleton<IConsole>( PhysicalConsole.Singleton )
                 .AddTransient<IFileSystem, FileSystem>()
+                .AddTransient<IDeserializer>( _ =>
+                    new DeserializerBuilder()
+                        .WithNamingConvention( new CamelCaseNamingConvention() )
+                        .WithNodeDeserializer( inner => new Template.ValidatingNodeDeserializer( inner ),
+                            s => s.InsteadOf<ObjectNodeDeserializer>() )
+                        .WithTypeConverter( new Template.TypeCodeTypeConverter() )
+                        .WithTagMapping( Template.Builders.ChoiceValidatorBuilder.Tag,
+                            typeof(Template.Builders.ChoiceValidatorBuilder) )
+                        .Build() )
                 .BuildServiceProvider();
 
             using( services )
