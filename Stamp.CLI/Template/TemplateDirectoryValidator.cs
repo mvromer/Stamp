@@ -5,7 +5,7 @@ namespace Stamp.CLI.Template
 {
     class TemplateDirectoryValidator : ITemplateDirectoryValidator
     {
-        internal TemplateDirectoryValidator( IFileSystem fileSystem,
+        public TemplateDirectoryValidator( IFileSystem fileSystem,
             ITemplateLoader templateLoader,
             ITemplateValidator templateValidator )
         {

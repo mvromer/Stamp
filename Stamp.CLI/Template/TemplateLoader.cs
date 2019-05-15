@@ -14,7 +14,7 @@ namespace Stamp.CLI.Template
 {
     class TemplateLoader : ITemplateLoader
     {
-        internal TemplateLoader( IFileSystem fileSystem,
+        public TemplateLoader( IFileSystem fileSystem,
             IRepositoryLoader repositoryLoader,
             IDeserializer deserializer )
         {

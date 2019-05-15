@@ -20,7 +20,7 @@ namespace Stamp.CLI.Config
 
         internal static string RootDirName { get; } = "stamp";
 
-        internal StampConfig( ISystemEnvironment systemEnvironment )
+        public StampConfig( ISystemEnvironment systemEnvironment )
         {
             this.SystemEnvironment = systemEnvironment;
 

@@ -11,7 +11,7 @@ namespace Stamp.CLI.Repository
 {
     class RepositoryLoader : IRepositoryLoader
     {
-        internal RepositoryLoader( IFileSystem fileSystem,
+        public RepositoryLoader( IFileSystem fileSystem,
             IStampConfig stampConfig )
         {
             this.FileSystem = fileSystem;
@@ -31,10 +31,14 @@ namespace Stamp.CLI.Repository
                     // TODO: Implement repository config file parsing.
                 }
             }
-            catch( FileNotFoundException )
+            catch( IOException ex ) when (
+                ex is DirectoryNotFoundException ||
+                ex is FileNotFoundException
+            )
             {
-                // Ignore this exception. We'll just return the default collection only contains the
-                // local repository.
+                // Ignore these exception. When the repository config doesn't exist for whatever
+                // reason, we'll just return the default collection which only contains the local
+                // repository.
             }
 
             return new ReadOnlyCollection<IRepository>( repositories );
