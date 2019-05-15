@@ -16,7 +16,7 @@ namespace Stamp.Tests
     public class TemplateTests
     {
         [Fact]
-        public void TestItCanReadMinimalManifest()
+        public void ItCanReadMinimalManifest()
         {
             var manifest = @"
 name: FooTemplate
@@ -33,7 +33,7 @@ version: 1.0.0
         }
 
         [Fact]
-        public void TestItFailsWhenMissingTemplateName()
+        public void ItFailsWhenMissingTemplateName()
         {
             var manifest = @"
 version: 1.0.0
@@ -48,7 +48,7 @@ version: 1.0.0
         }
 
         [Fact]
-        public void TestItFailsWhenMissingTemplateVersion()
+        public void ItFailsWhenMissingTemplateVersion()
         {
             var manifest = @"
 name: FooTemplate
@@ -63,7 +63,7 @@ name: FooTemplate
         }
 
         [Fact]
-        public void TestItCanReadSimpleIntParameterFromManifest()
+        public void ItCanReadSimpleIntParameterFromManifest()
         {
             var manifest = @"
 name: FooTemplate
@@ -88,7 +88,7 @@ parameters:
         }
 
         [Fact]
-        public void TestItCanReadIntParameterWithValidChoiceValidatorFromManifest()
+        public void ItCanReadIntParameterWithValidChoiceValidatorFromManifest()
         {
             var manifest = @"
 name: FooTemplate
@@ -126,7 +126,7 @@ parameters:
         }
 
         [Fact]
-        public void TestItFailsWhenChoiceValidatorValuesDoNotMatchParameterType()
+        public void ItFailsWhenChoiceValidatorValuesDoNotMatchParameterType()
         {
             var manifest = @"
 name: FooTemplate
@@ -150,7 +150,7 @@ parameters:
         }
 
         [Fact]
-        public void TestItCanReadSimpleStringParameterFromManifest()
+        public void ItCanReadSimpleStringParameterFromManifest()
         {
             var manifest = @"
 name: FooTemplate
@@ -175,7 +175,7 @@ parameters:
         }
 
         [Fact]
-        public void TestItCanReadSimpleFloatParameterFromManifest()
+        public void ItCanReadSimpleFloatParameterFromManifest()
         {
             var manifest = @"
 name: FooTemplate
@@ -200,7 +200,7 @@ parameters:
         }
 
         [Fact]
-        public void TestItCanReadSimpleBoolParameterFromManifest()
+        public void ItCanReadSimpleBoolParameterFromManifest()
         {
             var manifest = @"
 name: FooTemplate
@@ -225,7 +225,7 @@ parameters:
         }
 
         [Fact]
-        public void TestItCanReadRequiredParameterFieldFromManifest()
+        public void ItCanReadRequiredParameterFieldFromManifest()
         {
             var manifest = @"
 name: FooTemplate
@@ -249,7 +249,7 @@ parameters:
         }
 
         [Fact]
-        public void TestItCanReadDefaultParameterFieldFromManifest()
+        public void ItCanReadDefaultParameterFieldFromManifest()
         {
             var manifest = @"
 name: FooTemplate
@@ -273,7 +273,7 @@ parameters:
         }
 
         [Fact]
-        public void TestItCanReadSimpleFileFromManifest()
+        public void ItCanReadSimpleFileFromManifest()
         {
             var manifest = @"
 name: FooTemplate
@@ -300,7 +300,7 @@ files:
         }
 
         [Fact]
-        public void TestItCanReadComputedFileFromManifest()
+        public void ItCanReadComputedFileFromManifest()
         {
             var manifest = @"
 name: FooTemplate
@@ -322,7 +322,7 @@ files:
         }
 
         [Fact]
-        public void TestItCanReadOutputDirectoryFromManifest()
+        public void ItCanReadOutputDirectoryFromManifest()
         {
             var manifest = @"
 name: FooTemplate
@@ -344,7 +344,7 @@ files:
         }
 
         [Fact]
-        public void TestItCanReadOutputNameFromManifest()
+        public void ItCanReadOutputNameFromManifest()
         {
             var manifest = @"
 name: FooTemplate
@@ -366,7 +366,7 @@ files:
         }
 
         [Fact]
-        public void TestItFailsWhenOutputNameContainsDirectory()
+        public void ItFailsWhenOutputNameContainsDirectory()
         {
             var manifest = @"
 name: FooTemplate

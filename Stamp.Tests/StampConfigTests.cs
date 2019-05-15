@@ -13,7 +13,7 @@ namespace Stamp.Tests
     public class StampConfigTests
     {
         [Fact]
-        public void TestItLoadStandardStampConfig()
+        public void ItLoadStandardStampConfig()
         {
             IPurePath mockedFolderPath = PurePath.Create( "/opt" );
             var mockedEnvironment = Mock.Of<ISystemEnvironment>(
