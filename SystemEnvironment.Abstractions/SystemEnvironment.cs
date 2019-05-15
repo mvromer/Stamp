@@ -1,11 +1,10 @@
 using System;
 
-namespace Environment.Abstractions
+namespace SystemEnvironment.Abstractions
 {
     public class SystemEnvironment : ISystemEnvironment
     {
-        public string GetFolderPath( System.Environment.SpecialFolder folder,
-            System.Environment.SpecialFolderOption option )
+        public string GetFolderPath( Environment.SpecialFolder folder, Environment.SpecialFolderOption option )
         {
             return System.Environment.GetFolderPath( folder, option );
         }
