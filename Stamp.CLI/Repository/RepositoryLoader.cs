@@ -36,7 +36,7 @@ namespace Stamp.CLI.Repository
                 ex is FileNotFoundException
             )
             {
-                // Ignore these exception. When the repository config doesn't exist for whatever
+                // Ignore these exceptions. When the repository config doesn't exist for whatever
                 // reason, we'll just return the default collection which only contains the local
                 // repository.
             }
