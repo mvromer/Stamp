@@ -14,17 +14,18 @@ namespace Stamp.CLI.Commands.Repo
     [Command( Description = "List all configured template repositories." )]
     class ListCommand
     {
-        public ListCommand( ILogger<ListCommand> logger )
+        public ListCommand( ILogger<ListCommand> logger,
+            IRepositoryLoader repositoryLoader )
         {
             this.Logger = logger;
+            this.RepositoryLoader = repositoryLoader;
         }
 
         private int OnExecute( IConsole console )
         {
             try
             {
-                var stampConfig = StampConfig.Load();
-                var repositories = stampConfig.LoadRepositories();
+                var repositories = this.RepositoryLoader.LoadRepositories();
                 var repoTable = BuildRepositoryTable( repositories );
                 var tableOutput = ConsoleTableBuilder
                     .From( repoTable )
@@ -64,5 +65,6 @@ namespace Stamp.CLI.Commands.Repo
         }
 
         private ILogger<ListCommand> Logger { get; }
+        private IRepositoryLoader RepositoryLoader { get; }
     }
 }

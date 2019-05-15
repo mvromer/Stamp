@@ -22,6 +22,10 @@
     <PackageReference Include="YamlDotNet" Version="6.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SystemEnvironment.Abstractions\SystemEnvironment.Abstractions.csproj" />
+  </ItemGroup>
+
   <PropertyGroup>
     <Antlr4ToolPath>$(MSBuildProjectDirectory)/../.tools/antlr-4.7.2-complete.jar</Antlr4ToolPath>
   </PropertyGroup>

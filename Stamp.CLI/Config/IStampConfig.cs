@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using PathLib;
 
 using Stamp.CLI.Repository;
 
@@ -6,6 +6,6 @@ namespace Stamp.CLI.Config
 {
     interface IStampConfig
     {
-        IReadOnlyCollection<IRepository> LoadRepositories();
+        IPurePath RootDir { get; }
     }
 }

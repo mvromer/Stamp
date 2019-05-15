@@ -1,5 +1,9 @@
+using System;
 using System.Linq;
 using FluentAssertions;
+using Moq;
+using PathLib;
+using SystemEnvironment.Abstractions;
 using Xunit;
 
 using Stamp.CLI.Config;
@@ -11,19 +15,15 @@ namespace Stamp.Tests
         [Fact]
         public void TestItLoadStandardStampConfig()
         {
-            var stampConfig = StampConfig.Load();
-            stampConfig.Should().NotBeNull();
-        }
+            IPurePath mockedFolderPath = PurePath.Create( "/opt" );
+            var mockedEnvironment = Mock.Of<ISystemEnvironment>(
+                e => e.GetFolderPath( It.IsAny<Environment.SpecialFolder>(),
+                    It.IsAny<Environment.SpecialFolderOption>() ) == mockedFolderPath.ToString()
+            );
 
-        [Fact]
-        public void TestItCanLoadDefaultRepositories()
-        {
-            var stampConfig = StampConfig.Load();
-            var repositories = stampConfig.LoadRepositories();
-            repositories.Should().NotBeNull();
-            repositories.Count.Should().Be( 1 );
-            repositories.First().Name.Should().Be( ".local" );
-            repositories.First().Description.Should().Be( "Local repository" );
+            IStampConfig stampConfig = new StampConfig( mockedEnvironment );
+            var expectedRootDir = mockedFolderPath.Join( StampConfig.RootDirName );
+            stampConfig.RootDir.Should().Be( expectedRootDir );
         }
     }
 }

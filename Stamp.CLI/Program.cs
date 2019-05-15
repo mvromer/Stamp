@@ -5,12 +5,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using McMaster.Extensions.CommandLineUtils;
 using System.IO.Abstractions;
+using SystemEnvironment.Abstractions;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization.NodeDeserializers;
 
 [assembly: CLSCompliant( isCompliant: false )]
 [assembly: InternalsVisibleTo( "Stamp.Tests" )]
+// Needed to make internal interfaces accessible to Moq's dynamic proxy generator.
+[assembly: InternalsVisibleTo( "DynamicProxyGenAssembly2" )]
 
 namespace Stamp.CLI
 {
@@ -27,6 +30,10 @@ namespace Stamp.CLI
                 .AddLogging( builder => builder.AddConsole() )
                 .AddSingleton<IConsole>( PhysicalConsole.Singleton )
                 .AddTransient<IFileSystem, FileSystem>()
+                .AddTransient<ISystemEnvironment, SystemEnvironment.Abstractions.SystemEnvironment>()
+                .AddTransient<Repository.IRepositoryLoader, Repository.RepositoryLoader>()
+                .AddTransient<Template.ITemplateDirectoryValidator, Template.TemplateDirectoryValidator>()
+                .AddTransient<Template.ITemplateLoader, Template.TemplateLoader>()
                 .AddTransient<IDeserializer>( _ =>
                     new DeserializerBuilder()
                         .WithNamingConvention( new CamelCaseNamingConvention() )

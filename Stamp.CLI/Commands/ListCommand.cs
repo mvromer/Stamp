@@ -24,7 +24,6 @@ namespace Stamp.CLI.Commands
         {
             try
             {
-                var stampConfig = StampConfig.Load();
                 return 0;
             }
             catch( Exception ex )
