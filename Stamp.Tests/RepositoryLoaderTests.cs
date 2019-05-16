@@ -18,7 +18,7 @@ namespace Stamp.Tests
         {
             var fileSystem = new MockFileSystem();
             var stampConfig = Mock.Of<IStampConfig>(
-                c => c.RootDir == PurePath.Create( "/opt/stamp" )
+                c => c.RootPath == PurePath.Create( "/opt/stamp" )
             );
 
             var repositoryLoader = new RepositoryLoader( fileSystem, stampConfig );

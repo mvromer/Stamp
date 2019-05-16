@@ -25,7 +25,7 @@ namespace Stamp.CLI.Repository
             try
             {
                 const string RepositoryConfigFileName = "repositories.yml";
-                var repoConfigPath = this.StampConfig.RootDir.Join( RepositoryConfigFileName );
+                var repoConfigPath = this.StampConfig.RootPath.Join( RepositoryConfigFileName );
 
                 using( var repoConfigFile = this.FileSystem.File.Open( repoConfigPath.ToString(), FileMode.Open ) )
                 {

@@ -6,6 +6,8 @@ namespace Stamp.CLI.Config
 {
     interface IStampConfig
     {
-        IPurePath RootDir { get; }
+        IPurePath RootPath { get; }
+
+        IPurePath GetRepositoryPath( string repoName );
     }
 }
