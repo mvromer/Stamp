@@ -25,10 +25,8 @@ namespace Stamp.CLI.Commands.Repo
         {
             try
             {
-                var repositories = this.RepositoryLoader.LoadRepositories();
-                var repoTable = BuildRepositoryTable( repositories );
                 var tableOutput = ConsoleTableBuilder
-                    .From( repoTable )
+                    .From( BuildRepositoryTable() )
                     .WithFormat( ConsoleTableBuilderFormat.Minimal )
                     .Export();
 
@@ -42,7 +40,7 @@ namespace Stamp.CLI.Commands.Repo
             }
         }
 
-        private DataTable BuildRepositoryTable( IEnumerable<IRepository> repositories )
+        private DataTable BuildRepositoryTable()
         {
             const string NameColumn = "Name";
             const string DescriptionColumn = "Description";
@@ -53,7 +51,7 @@ namespace Stamp.CLI.Commands.Repo
                 new DataColumn( DescriptionColumn, typeof(string) )
             } );
 
-            foreach( var repo in repositories )
+            foreach( var repo in this.RepositoryLoader.LoadRepositories() )
             {
                 var row = repoTable.NewRow();
                 row[NameColumn] = repo.Name;

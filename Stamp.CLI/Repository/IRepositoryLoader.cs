@@ -4,6 +4,6 @@ namespace Stamp.CLI.Repository
 {
     interface IRepositoryLoader
     {
-        IReadOnlyCollection<IRepository> LoadRepositories();
+        IEnumerable<IRepository> LoadRepositories();
     }
 }

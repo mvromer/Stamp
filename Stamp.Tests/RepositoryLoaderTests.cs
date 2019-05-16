@@ -22,7 +22,7 @@ namespace Stamp.Tests
             );
 
             var repositoryLoader = new RepositoryLoader( fileSystem, stampConfig );
-            var repositories = repositoryLoader.LoadRepositories();
+            var repositories = repositoryLoader.LoadRepositories().ToList();
             repositories.Should().NotBeNull();
             repositories.Count.Should().Be( 1 );
             repositories.First().Name.Should().Be( ".local" );

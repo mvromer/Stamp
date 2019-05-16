@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 
 using PathLib;
@@ -18,9 +17,11 @@ namespace Stamp.CLI.Repository
             this.StampConfig = stampConfig;
         }
 
-        public IReadOnlyCollection<IRepository> LoadRepositories()
+        public IEnumerable<IRepository> LoadRepositories()
         {
-            var repositories = GetDefaultRepositories();
+            foreach( var repo in GetDefaultRepositories() )
+                yield return repo;
+
             try
             {
                 const string RepositoryConfigFileName = "repositories.yml";
@@ -40,16 +41,11 @@ namespace Stamp.CLI.Repository
                 // reason, we'll just return the default collection which only contains the local
                 // repository.
             }
-
-            return new ReadOnlyCollection<IRepository>( repositories );
         }
 
-        private IList<IRepository> GetDefaultRepositories()
+        private IEnumerable<IRepository> GetDefaultRepositories()
         {
-            return new List<IRepository>
-            {
-                new Repository( name: ".local", description: "Local repository" )
-            };
+            yield return new Repository( name: ".local", description: "Local repository" );
         }
 
         private IFileSystem FileSystem { get; }
