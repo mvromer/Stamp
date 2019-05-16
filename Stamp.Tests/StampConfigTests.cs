@@ -53,5 +53,44 @@ namespace Stamp.Tests
             IStampConfig stampConfig = new StampConfig( environment, fileSystem );
             stampConfig.GetRepositoryPath( repoName ).Should().Be( expectedRepoPath );
         }
+
+        [Fact]
+        public void ItGetsNullForMissingRepositoryPath()
+        {
+            const string repoName = "TestRepo";
+            var mockedFolderPath = PurePath.Create( "/opt" );
+
+            var environment = Mock.Of<ISystemEnvironment>(
+                e => e.GetFolderPath( It.IsAny<Environment.SpecialFolder>(),
+                    It.IsAny<Environment.SpecialFolderOption>() ) == mockedFolderPath.ToString()
+            );
+
+            var fileSystem = new MockFileSystem();
+
+            IStampConfig stampConfig = new StampConfig( environment, fileSystem );
+            stampConfig.GetRepositoryPath( repoName ).Should().BeNull();
+        }
+
+        [Fact]
+        public void ItGetsCreatesMissingRepositoryPath()
+        {
+            const string repoName = "TestRepo";
+            var mockedFolderPath = PurePath.Create( "/opt" );
+            var expectedRepoPath = mockedFolderPath.Join(
+                StampConfigConstants.ConfigDirectoryName,
+                StampConfigConstants.RepositoriesDirectoryName,
+                repoName
+            );
+
+            var environment = Mock.Of<ISystemEnvironment>(
+                e => e.GetFolderPath( It.IsAny<Environment.SpecialFolder>(),
+                    It.IsAny<Environment.SpecialFolderOption>() ) == mockedFolderPath.ToString()
+            );
+
+            var fileSystem = new MockFileSystem();
+
+            IStampConfig stampConfig = new StampConfig( environment, fileSystem );
+            stampConfig.GetRepositoryPath( repoName, createMissing: true ).Should().Be( expectedRepoPath );
+        }
     }
 }

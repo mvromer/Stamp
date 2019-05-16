@@ -21,7 +21,14 @@ namespace Stamp.CLI.Config
 
         public IPurePath GetRepositoryPath( string repoName )
         {
+            return GetRepositoryPath( repoName, createMissing: false );
+        }
+
+        public IPurePath GetRepositoryPath( string repoName, bool createMissing )
+        {
             var repoPath = this.RootPath.Join( StampConfigConstants.RepositoriesDirectoryName, repoName );
+            if( createMissing )
+                this.FileSystem.Directory.CreateDirectory( repoPath.ToString() );
             return this.FileSystem.Directory.Exists( repoPath.ToString() ) ? repoPath : null;
         }
 

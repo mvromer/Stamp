@@ -9,5 +9,7 @@ namespace Stamp.CLI.Config
         IPurePath RootPath { get; }
 
         IPurePath GetRepositoryPath( string repoName );
+
+        IPurePath GetRepositoryPath( string repoName, bool createMissing );
     }
 }
