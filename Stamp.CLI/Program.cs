@@ -38,7 +38,7 @@ namespace Stamp.CLI
                 .AddTransient<Template.ITemplateValidator, Template.TemplateValidator>()
                 .AddTransient<IDeserializer>( _ =>
                     new DeserializerBuilder()
-                        .WithNamingConvention( new CamelCaseNamingConvention() )
+                        .WithNamingConvention( CamelCaseNamingConvention.Instance )
                         .WithNodeDeserializer( inner => new Template.ValidatingNodeDeserializer( inner ),
                             s => s.InsteadOf<ObjectNodeDeserializer>() )
                         .WithTypeConverter( new Template.TypeCodeTypeConverter() )

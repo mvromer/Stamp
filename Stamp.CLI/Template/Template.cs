@@ -28,7 +28,7 @@ namespace Stamp.CLI.Template
         internal static ITemplate CreateFromReader( TextReader reader )
         {
             var deserializer = new DeserializerBuilder()
-                .WithNamingConvention( new CamelCaseNamingConvention() )
+                .WithNamingConvention( CamelCaseNamingConvention.Instance )
                 .WithNodeDeserializer( inner => new ValidatingNodeDeserializer( inner ),
                     s => s.InsteadOf<ObjectNodeDeserializer>() )
                 .WithTypeConverter( new TypeCodeTypeConverter() )

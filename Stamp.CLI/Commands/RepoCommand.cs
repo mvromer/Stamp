@@ -16,7 +16,7 @@ namespace Stamp.CLI.Commands
             return command.Commands
                 .Where( c => c.Name == ListRepoCommandName )
                 .First()
-                .Invoke();
+                .Execute();
         }
     }
 }
