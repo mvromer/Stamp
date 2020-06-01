@@ -4,7 +4,6 @@ using System.IO;
 using PathLib;
 using System.IO.Abstractions;
 using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.Converters;
 using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization.NodeDeserializers;
 
@@ -15,12 +14,10 @@ namespace Stamp.CLI.Template
     class TemplateLoader : ITemplateLoader
     {
         public TemplateLoader( IFileSystem fileSystem,
-            IRepositoryLoader repositoryLoader,
-            IDeserializer deserializer )
+            IRepositoryLoader repositoryLoader )
         {
             this.FileSystem = fileSystem;
             this.RepositoryLoader = repositoryLoader;
-            this.Deserializer = deserializer;
         }
 
 
@@ -32,9 +29,16 @@ namespace Stamp.CLI.Template
 
         public ITemplate LoadFromReader( TextReader reader )
         {
-            return this.Deserializer
-                .Deserialize<Builders.TemplateBuilder>( reader )
+            var deserializer = new DeserializerBuilder()
+                .WithNamingConvention( CamelCaseNamingConvention.Instance )
+                .WithNodeDeserializer( inner => new ValidatingNodeDeserializer( inner ),
+                    s => s.InsteadOf<ObjectNodeDeserializer>() )
+                .WithTypeConverter( new TypeCodeTypeConverter() )
+                .WithTagMapping( Builders.ChoiceValidatorBuilder.Tag,
+                    typeof(Builders.ChoiceValidatorBuilder) )
                 .Build();
+
+            return deserializer.Deserialize<Builders.TemplateBuilder>( reader ).Build();
         }
 
         public ITemplate FindTemplate( string templateName )
@@ -46,6 +50,5 @@ namespace Stamp.CLI.Template
 
         private IFileSystem FileSystem { get; }
         private IRepositoryLoader RepositoryLoader { get; }
-        private IDeserializer Deserializer { get; }
     }
 }

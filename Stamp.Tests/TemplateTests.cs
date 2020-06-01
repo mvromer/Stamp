@@ -2,12 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
+
 using FluentAssertions;
+using Moq;
 using PathLib;
 using Xunit;
 using YamlDotNet.Core;
 
+using Stamp.CLI.Repository;
 using Stamp.CLI.Template;
 using Stamp.CLI.Template.Validators;
 
@@ -15,6 +19,14 @@ namespace Stamp.Tests
 {
     public class TemplateTests
     {
+        public TemplateTests()
+        {
+            this.TemplateLoader = new TemplateLoader( new MockFileSystem(),
+                Mock.Of<IRepositoryLoader>() );
+        }
+
+        private TemplateLoader TemplateLoader { get; }
+
         [Fact]
         public void ItCanReadMinimalManifest()
         {
@@ -25,7 +37,7 @@ version: 1.0.0
 
             using( var reader = new StringReader( manifest ) )
             {
-                var t = Template.CreateFromReader( reader );
+                var t = this.TemplateLoader.LoadFromReader( reader );
                 t.Name.Should().Be( "FooTemplate" );
                 t.Version.Should().Be( "1.0.0" );
                 t.Parameters.Any().Should().BeFalse();
@@ -41,7 +53,7 @@ version: 1.0.0
 
             using( var reader = new StringReader( manifest ) )
             {
-                Action act = () => Template.CreateFromReader( reader );
+                Action act = () => this.TemplateLoader.LoadFromReader( reader );
                 act.Should().Throw<YamlException>()
                     .WithInnerException<ValidationException>();
             }
@@ -56,7 +68,7 @@ name: FooTemplate
 
             using( var reader = new StringReader( manifest ) )
             {
-                Action act = () => Template.CreateFromReader( reader );
+                Action act = () => this.TemplateLoader.LoadFromReader( reader );
                 act.Should().Throw<YamlException>()
                     .WithInnerException<ValidationException>();
             }
@@ -76,7 +88,7 @@ parameters:
 
             using( var reader = new StringReader( manifest ) )
             {
-                var t = Template.CreateFromReader( reader );
+                var t = this.TemplateLoader.LoadFromReader( reader );
                 t.Parameters.Count.Should().Be( 1 );
                 t.Parameters.First().Should().BeOfType<Parameter<int>>();
 
@@ -107,7 +119,7 @@ parameters:
 
             using( var reader = new StringReader( manifest ) )
             {
-                var t = Template.CreateFromReader( reader );
+                var t = this.TemplateLoader.LoadFromReader( reader );
                 t.Parameters.Count.Should().Be( 1 );
                 t.Parameters.First().Should().BeOfType<Parameter<int>>();
 
@@ -144,7 +156,7 @@ parameters:
 
             using( var reader = new StringReader( manifest ) )
             {
-                Action act = () => Template.CreateFromReader( reader );
+                Action act = () => this.TemplateLoader.LoadFromReader( reader );
                 act.Should().Throw<InvalidCastException>();
             }
         }
@@ -163,7 +175,7 @@ parameters:
 
             using( var reader = new StringReader( manifest ) )
             {
-                var t = Template.CreateFromReader( reader );
+                var t = this.TemplateLoader.LoadFromReader( reader );
                 t.Parameters.Count.Should().Be( 1 );
                 t.Parameters.First().Should().BeOfType<Parameter<string>>();
 
@@ -188,7 +200,7 @@ parameters:
 
             using( var reader = new StringReader( manifest ) )
             {
-                var t = Template.CreateFromReader( reader );
+                var t = this.TemplateLoader.LoadFromReader( reader );
                 t.Parameters.Count.Should().Be( 1 );
                 t.Parameters.First().Should().BeOfType<Parameter<float>>();
 
@@ -213,7 +225,7 @@ parameters:
 
             using( var reader = new StringReader( manifest ) )
             {
-                var t = Template.CreateFromReader( reader );
+                var t = this.TemplateLoader.LoadFromReader( reader );
                 t.Parameters.Count.Should().Be( 1 );
                 t.Parameters.First().Should().BeOfType<Parameter<bool>>();
 
@@ -239,7 +251,7 @@ parameters:
 
             using( var reader = new StringReader( manifest ) )
             {
-                var t = Template.CreateFromReader( reader );
+                var t = this.TemplateLoader.LoadFromReader( reader );
                 t.Parameters.Count.Should().Be( 1 );
                 t.Parameters.First().Should().BeOfType<Parameter<int>>();
 
@@ -263,7 +275,7 @@ parameters:
 
             using( var reader = new StringReader( manifest ) )
             {
-                var t = Template.CreateFromReader( reader );
+                var t = this.TemplateLoader.LoadFromReader( reader );
                 t.Parameters.Count.Should().Be( 1 );
                 t.Parameters.First().Should().BeOfType<Parameter<int>>();
 
@@ -285,7 +297,7 @@ files:
 
             using( var reader = new StringReader( manifest ) )
             {
-                var t = Template.CreateFromReader( reader );
+                var t = this.TemplateLoader.LoadFromReader( reader );
                 t.Files.Count.Should().Be( 1 );
 
                 var f = t.Files.First();
@@ -313,7 +325,7 @@ files:
 
             using( var reader = new StringReader( manifest ) )
             {
-                var t = Template.CreateFromReader( reader );
+                var t = this.TemplateLoader.LoadFromReader( reader );
                 t.Files.Count.Should().Be( 1 );
 
                 var f = t.Files.First();
@@ -335,7 +347,7 @@ files:
 
             using( var reader = new StringReader( manifest ) )
             {
-                var t = Template.CreateFromReader( reader );
+                var t = this.TemplateLoader.LoadFromReader( reader );
                 t.Files.Count.Should().Be( 1 );
 
                 var f = t.Files.First();
@@ -357,7 +369,7 @@ files:
 
             using( var reader = new StringReader( manifest ) )
             {
-                var t = Template.CreateFromReader( reader );
+                var t = this.TemplateLoader.LoadFromReader( reader );
                 t.Files.Count.Should().Be( 1 );
 
                 var f = t.Files.First();
@@ -379,7 +391,7 @@ files:
 
             using( var reader = new StringReader( manifest ) )
             {
-                Action act = () => Template.CreateFromReader( reader );
+                Action act = () => this.TemplateLoader.LoadFromReader( reader );
                 act.Should().Throw<NotSupportedException>();
             }
         }
