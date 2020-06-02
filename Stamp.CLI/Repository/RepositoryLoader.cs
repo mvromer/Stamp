@@ -19,8 +19,7 @@ namespace Stamp.CLI.Repository
 
         public IEnumerable<IRepository> LoadRepositories()
         {
-            foreach( var repo in GetDefaultRepositories() )
-                yield return repo;
+            yield return Repository.LocalInstance;
 
             try
             {
@@ -41,11 +40,6 @@ namespace Stamp.CLI.Repository
                 // reason, we'll just return the default collection which only contains the local
                 // repository.
             }
-        }
-
-        private IEnumerable<IRepository> GetDefaultRepositories()
-        {
-            yield return new Repository( name: ".local", description: "Local repository" );
         }
 
         private IFileSystem FileSystem { get; }
