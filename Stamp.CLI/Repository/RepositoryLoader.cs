@@ -25,11 +25,9 @@ namespace Stamp.CLI.Repository
             {
                 const string RepositoryConfigFileName = "repositories.yml";
                 var repoConfigPath = this.StampConfig.RootPath.Join( RepositoryConfigFileName );
+                using var repoConfigFile = this.FileSystem.File.Open( repoConfigPath.ToString(), FileMode.Open );
 
-                using( var repoConfigFile = this.FileSystem.File.Open( repoConfigPath.ToString(), FileMode.Open ) )
-                {
-                    // TODO: Implement repository config file parsing.
-                }
+                // TODO: Implement repository config file parsing.
             }
             catch( IOException ex ) when (
                 ex is DirectoryNotFoundException ||
