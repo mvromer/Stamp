@@ -24,13 +24,15 @@ namespace Stamp.Tests
         {
             this.FileSystem = new MockFileSystem();
             this.TemplateLoader = new TemplateLoader( this.FileSystem );
+            this.TestTemplatePath = PurePath.Create( "/opt/template" );
+            this.TestTemplateManifestPath = TestTemplatePath.Join( "manifest.yml" );
         }
 
         private MockFileSystem FileSystem { get; }
         private TemplateLoader TemplateLoader { get; }
 
-        private static readonly IPurePath TestTemplatePath = PurePath.Create( "/opt/template" );
-        private static readonly IPurePath TestTemplateManifestPath = TestTemplatePath.Join( "manifest.yml" );
+        private IPurePath TestTemplatePath { get; }
+        private IPurePath TestTemplateManifestPath { get; }
 
         private void SetManifest( string manifestContents )
         {
