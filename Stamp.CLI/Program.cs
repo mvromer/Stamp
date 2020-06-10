@@ -33,9 +33,7 @@ namespace Stamp.CLI
                 .AddTransient<ISystemEnvironment, SystemEnvironment.Abstractions.SystemEnvironment>()
                 .AddTransient<Config.IStampConfig, Config.StampConfig>()
                 .AddTransient<Repository.IRepositoryLoader, Repository.RepositoryLoader>()
-                .AddTransient<Template.ITemplateDirectoryValidator, Template.TemplateDirectoryValidator>()
                 .AddTransient<Template.ITemplateLoader, Template.TemplateLoader>()
-                .AddTransient<Template.ITemplateValidator, Template.TemplateValidator>()
                 .AddTransient<IDeserializer>( _ =>
                     new DeserializerBuilder()
                         .WithNamingConvention( CamelCaseNamingConvention.Instance )
