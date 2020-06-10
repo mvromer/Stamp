@@ -11,5 +11,7 @@ namespace Stamp.CLI.Config
         IPurePath GetRepositoryPath( string repoName );
 
         IPurePath GetRepositoryPath( string repoName, bool createMissing );
+
+        IPurePath GetLocalRepositoryPath();
     }
 }

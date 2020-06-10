@@ -32,6 +32,11 @@ namespace Stamp.CLI.Config
             return this.FileSystem.Directory.Exists( repoPath.ToString() ) ? repoPath : null;
         }
 
+        public IPurePath GetLocalRepositoryPath()
+        {
+            return GetRepositoryPath( repoName: ".local", createMissing: true );
+        }
+
         public StampConfig( ISystemEnvironment systemEnvironment, IFileSystem fileSystem )
         {
             this.SystemEnvironment = systemEnvironment;
