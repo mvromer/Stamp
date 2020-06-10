@@ -92,5 +92,27 @@ namespace Stamp.Tests
             IStampConfig stampConfig = new StampConfig( environment, fileSystem );
             stampConfig.GetRepositoryPath( repoName, createMissing: true ).Should().Be( expectedRepoPath );
         }
+
+        [Fact]
+        public void ItGetsLocalRepositoryPath()
+        {
+            const string localRepoName = ".local";
+            var mockedFolderPath = PurePath.Create( "/opt" );
+            var expectedRepoPath = mockedFolderPath.Join(
+                StampConfigConstants.ConfigDirectoryName,
+                StampConfigConstants.RepositoriesDirectoryName,
+                localRepoName
+            );
+
+            var environment = Mock.Of<ISystemEnvironment>(
+                e => e.GetFolderPath( It.IsAny<Environment.SpecialFolder>(),
+                    It.IsAny<Environment.SpecialFolderOption>() ) == mockedFolderPath.ToString()
+            );
+
+            var fileSystem = new MockFileSystem();
+
+            IStampConfig stampConfig = new StampConfig( environment, fileSystem );
+            stampConfig.GetLocalRepositoryPath().Should().Be( expectedRepoPath );
+        }
     }
 }
