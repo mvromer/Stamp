@@ -1,34 +1,26 @@
 using System;
 using System.IO;
-
-using PathLib;
 using System.IO.Abstractions;
+using PathLib;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization.NodeDeserializers;
-
-using Stamp.CLI.Repository;
 
 namespace Stamp.CLI.Template
 {
     class TemplateLoader : ITemplateLoader
     {
-        public TemplateLoader( IFileSystem fileSystem,
-            IRepositoryLoader repositoryLoader )
+        public TemplateLoader( IFileSystem fileSystem )
         {
             this.FileSystem = fileSystem;
-            this.RepositoryLoader = repositoryLoader;
         }
 
-
-        public ITemplate LoadFromManifest( IPurePath manifestPath )
+        public ITemplate LoadFromTemplateDirectory( IPurePath templatePath )
         {
-            using( var reader = this.FileSystem.File.OpenText( manifestPath.ToString() ) )
-                return LoadFromReader( reader );
-        }
+            const string ManifestFileName = "manifest.yml";
+            var manifestPath = templatePath.Join( ManifestFileName );
+            using var reader = this.FileSystem.File.OpenText( manifestPath.ToString() );
 
-        public ITemplate LoadFromReader( TextReader reader )
-        {
             var deserializer = new DeserializerBuilder()
                 .WithNamingConvention( CamelCaseNamingConvention.Instance )
                 .WithNodeDeserializer( inner => new ValidatingNodeDeserializer( inner ),
@@ -41,14 +33,6 @@ namespace Stamp.CLI.Template
             return deserializer.Deserialize<Builders.TemplateBuilder>( reader ).Build();
         }
 
-        public ITemplate FindTemplate( string templateName )
-        {
-            if( string.IsNullOrEmpty( templateName ) )
-                throw new ArgumentException( "Template name cannot be null or empty.", nameof(templateName) );
-            return null;
-        }
-
         private IFileSystem FileSystem { get; }
-        private IRepositoryLoader RepositoryLoader { get; }
     }
 }

@@ -4,27 +4,20 @@ using PathLib;
 
 namespace Stamp.CLI.Template
 {
+    /// <summary>
+    /// Loads Stamp templates from various sources.
+    /// </summary>
     interface ITemplateLoader
     {
         /// <summary>
-        /// Loads a template from its manifest stored at the given path.
+        /// Loads a template rooted at the given path.
         /// </summary>
-        /// <param name="manifestPath">Path to the manifest file for the template to load.</param>
+        /// <param name="templatePath">Path to the directory containing the template. This path is
+        /// assumed to have the template's manifest file within it.</param>
         /// <returns>
-        /// A template object defined by the contents of the given manifest.
+        /// A template object defined by the contents of the manifest stored in the given template
+        /// path.
         /// </returns>
-        ITemplate LoadFromManifest( IPurePath manifestPath );
-
-        /// <summary>
-        /// Loads a template from its manifest currently opened by the given <c>TextReader</c>.
-        /// </summary>
-        /// <param name="reader"><c>TextReader</c> opened to the manifest of the template to load.</param>
-        /// <returns>
-        /// A template object defined by the contents of manifest opened by the given
-        /// <c>TextReader</c>.
-        /// </returns>
-        ITemplate LoadFromReader( TextReader reader );
-
-        ITemplate FindTemplate( string templateName );
+        ITemplate LoadFromTemplateDirectory( IPurePath templatePath );
     }
 }
