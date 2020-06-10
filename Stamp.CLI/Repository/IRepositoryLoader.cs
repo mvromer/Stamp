@@ -5,11 +5,19 @@ namespace Stamp.CLI.Repository
     interface IRepositoryLoader
     {
         /// <summary>
-        /// Loads and returns the local repository and all configured remote repositories.
+        /// Loads and returns all configured remote repositories.
         /// </summary>
         /// <returns>
-        /// Enumerable containing the local repository and all configured remote repositories.
+        /// Enumerable of all configured remote repositories.
         /// </returns>
         IEnumerable<IRepository> LoadRepositories();
+
+        /// <summary>
+        /// Load and return the local repository.
+        /// </summary>
+        /// <returns>
+        /// Local repository object.
+        /// </returns>
+        IRepository LoadLocalRepository();
     }
 }
