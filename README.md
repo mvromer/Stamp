@@ -1,12 +1,14 @@
-[![Build Status](https://dev.azure.com/mvromer/Stamp/_apis/build/status/Build%20Release%20Candidate?branchName=master&label=Build%20Release%20Candidate)](https://dev.azure.com/mvromer/Stamp/_build/latest?definitionId=1?branchName=master)
-
 # Stamp
-Command line template generator that is:
+Stamp takes project templates you define and uses them to stamp out new copies of those projects in
+a fast and repeatable manner. It provides a number of features that make it suitable in teams who
+want a more reliable way of scaffolding out new projects from a combination of templated files and
+custom scripting.
 
-* Cross-platform
-* Language agnostic
-* Extensible
-
+## Other features
+Project templates can be versioned, published, and shared with others, allowing teams to create
+libraries of templates for the automated creation of new team projects, regardless of the tech
+stacks or programming languages targeted by the created project. Hook scripts let templates inject
+custom logic at different points during project creation.
 
 ## How it works
 When Stamp is used to create a new instance of a template, it reads and processes the template's
